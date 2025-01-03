@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "menu": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "size": {
+          "type": "integer",
+          "minimum": 9,
+          "maximum": 54,
+          "enum": [
+            9, 18, 27, 36, 45, 54
+          ]
+        }
+      },
+      "required": ["title", "size"]
+    },
+    "prizes": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-zA-Z0-9_]+$": {
+          "type": "string",
+          "enum": ["random", "win"]
+        }
+      },
+      "additionalProperties": true
+    },
+    "ticks": {
+      "type": "object",
+      "patternProperties": {
+        "^[0-9]+(-[0-9]+)?$": {
+          "type": "object",
+          "properties": {
+            "interval": { "type": "integer", "minimum": 1 },
+            "gradual_slowdown": { "type": "boolean" },
+            "scale_factor": { "type": "number", "minimum": 0 },
+            "actions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "examples": [
+                      "replace_item",
+                      "move_item",
+                      "donate_case",
+                      "repeat_switch",
+                      "end"
+                    ]
+                  }
+                },
+                "required": ["type"],
+                "allOf": [
+                  {
+                    "if": { "properties": { "type": { "const": "replace_item" } } },
+                    "then": {
+                      "properties": {
+                        "slot": { "type": "integer", "minimum": 0 },
+                        "material": { "type": "string" },
+                        "name": { "type": "string" },
+                        "lore": {
+                          "type": "array",
+                          "items": { "type": "string" }
+                        }
+                      },
+                      "required": ["slot", "material"]
+                    }
+                  },
+                  {
+                    "if": { "properties": { "type": { "const": "move_item" } } },
+                    "then": {
+                      "properties": {
+                        "from": { "type": "integer", "minimum": 0 },
+                        "to": { "type": "integer", "minimum": 0 }
+                      },
+                      "required": ["from", "to"]
+                    }
+                  },
+                  {
+                    "if": { "properties": { "type": { "const": "donate_case" } } },
+                    "then": {
+                      "properties": {
+                        "actions": {
+                          "type": "array",
+                          "items": { "type": "string" }
+                        }
+                      },
+                      "required": ["actions"]
+                    }
+                  },
+                  {
+                    "if": { "properties": { "type": { "const": "repeat_switch" } } },
+                    "then": {
+                      "properties": {
+                        "base_slot": { "type": "integer", "minimum": 0 },
+                        "count": { "type": "integer", "minimum": 1 }
+                      },
+                      "required": ["base_slot", "count"]
+                    }
+                  }
+                ],
+                "additionalProperties": true
+              }
+            }
+          },
+          "required": ["actions"]
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "required": ["menu", "prizes", "ticks"],
+  "additionalProperties": true
+}
