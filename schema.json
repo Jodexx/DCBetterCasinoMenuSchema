@@ -10,9 +10,7 @@
           "type": "integer",
           "minimum": 9,
           "maximum": 54,
-          "enum": [
-            9, 18, 27, 36, 45, 54
-          ]
+          "enum": [9, 18, 27, 36, 45, 54]
         }
       },
       "required": ["title", "size"]
@@ -33,9 +31,6 @@
         "^[0-9]+(-[0-9]+)?$": {
           "type": "object",
           "properties": {
-            "interval": { "type": "integer", "minimum": 1 },
-            "gradual_slowdown": { "type": "boolean" },
-            "scale_factor": { "type": "number", "minimum": 0 },
             "actions": {
               "type": "array",
               "items": {
@@ -43,11 +38,12 @@
                 "properties": {
                   "type": {
                     "type": "string",
-                    "examples": [
+                    "enum": [
                       "replace_item",
                       "move_item",
+                      "switch_item",
                       "donate_case",
-                      "repeat_switch",
+                      "set_title",
                       "end"
                     ]
                   }
@@ -55,32 +51,66 @@
                 "required": ["type"],
                 "allOf": [
                   {
-                    "if": { "properties": { "type": { "const": "replace_item" } } },
+                    "if": {
+                      "properties": {
+                        "type": { "const": "replace_item" }
+                      },
+                      "required": ["type"]
+                    },
                     "then": {
                       "properties": {
                         "slot": { "type": "integer", "minimum": 0 },
                         "material": { "type": "string" },
+                        "id": {"type": "string"},
+                        "display_name": {"type": "string"},
+                        "displayName": {"type": "string"},
                         "name": { "type": "string" },
                         "lore": {
                           "type": "array",
                           "items": { "type": "string" }
+                        },
+                        "enchanted": {
+                          "type": "boolean"
+                        },
+                        "model_data": {
+                          "type": "integer"
+                        },
+                        "custom_model_data": {
+                          "type": "integer"
+                        },
+                        "customModelData": {
+                          "type": "integer"
+                        },
+                        "rgb": {
+                          "type": "string"
                         }
                       },
-                      "required": ["slot", "material"]
+                      "required": ["slot"],
+                      "additionalProperties": false
                     }
                   },
                   {
-                    "if": { "properties": { "type": { "const": "move_item" } } },
+                    "if": {
+                      "properties": {
+                        "type": { "const": "move_item" }
+                      },
+                      "required": ["type"]
+                    },
                     "then": {
                       "properties": {
                         "from": { "type": "integer", "minimum": 0 },
                         "to": { "type": "integer", "minimum": 0 }
                       },
-                      "required": ["from", "to"]
+                      "additionalProperties": false
                     }
                   },
                   {
-                    "if": { "properties": { "type": { "const": "donate_case" } } },
+                    "if": {
+                      "properties": {
+                        "type": { "const": "donate_case" }
+                      },
+                      "required": ["type"]
+                    },
                     "then": {
                       "properties": {
                         "actions": {
@@ -88,22 +118,55 @@
                           "items": { "type": "string" }
                         }
                       },
-                      "required": ["actions"]
+                      "required": ["actions"],
+                      "additionalProperties": false
                     }
                   },
                   {
-                    "if": { "properties": { "type": { "const": "repeat_switch" } } },
+                    "if": {
+                      "properties": {
+                        "type": { "const": "switch_item" }
+                      },
+                      "required": ["type"]
+                    },
                     "then": {
                       "properties": {
                         "base_slot": { "type": "integer", "minimum": 0 },
                         "count": { "type": "integer", "minimum": 1 }
                       },
-                      "required": ["base_slot", "count"]
+                      "required": ["base_slot", "count"],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "if": {
+                      "properties": {
+                        "type": { "const": "set_title" }
+                      },
+                      "required": ["type"]
+                    },
+                    "then": {
+                      "properties": {
+                        "title": { "type": "string" }
+                      },
+                      "additionalProperties": false
                     }
                   }
                 ],
-                "additionalProperties": true
+                "additionalProperties": false
               }
+            },
+            "gradual_slowdown": {
+              "type": "object",
+              "properties": {
+                "enabled": { "type": "boolean" },
+                "scale_factor": { "type": "number", "minimum": 0 }
+              },
+              "required": ["enabled"]
+            },
+            "interval": {
+              "type": "integer",
+              "minimum": 1
             }
           },
           "required": ["actions"]
