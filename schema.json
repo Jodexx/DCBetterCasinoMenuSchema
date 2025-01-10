@@ -44,6 +44,7 @@
                       "switch_item",
                       "donate_case",
                       "set_title",
+                      "set_click",
                       "end"
                     ]
                   }
