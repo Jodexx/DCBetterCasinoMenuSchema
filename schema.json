@@ -59,12 +59,10 @@
                     },
                     "then": {
                       "properties": {
-                        "slot": { "type": "integer", "minimum": 0 },
+                        "slot": {},
+                        "slots": {"type": "array"},
                         "material": { "type": "string" },
-                        "id": {"type": "string"},
                         "display_name": {"type": "string"},
-                        "displayName": {"type": "string"},
-                        "name": { "type": "string" },
                         "lore": {
                           "type": "array",
                           "items": { "type": "string" }
@@ -75,18 +73,11 @@
                         "model_data": {
                           "type": "integer"
                         },
-                        "custom_model_data": {
-                          "type": "integer"
-                        },
-                        "customModelData": {
-                          "type": "integer"
-                        },
                         "rgb": {
                           "type": "string"
                         }
                       },
-                      "required": ["slot"],
-                      "additionalProperties": false
+                      "additionalProperties": true
                     }
                   },
                   {
@@ -101,7 +92,7 @@
                         "from": { "type": "integer", "minimum": 0 },
                         "to": { "type": "integer", "minimum": 0 }
                       },
-                      "additionalProperties": false
+                      "additionalProperties": true
                     }
                   },
                   {
@@ -119,7 +110,7 @@
                         }
                       },
                       "required": ["actions"],
-                      "additionalProperties": false
+                      "additionalProperties": true
                     }
                   },
                   {
@@ -135,7 +126,7 @@
                         "count": { "type": "integer", "minimum": 1 }
                       },
                       "required": ["base_slot", "count"],
-                      "additionalProperties": false
+                      "additionalProperties": true
                     }
                   },
                   {
@@ -149,11 +140,11 @@
                       "properties": {
                         "title": { "type": "string" }
                       },
-                      "additionalProperties": false
+                      "additionalProperties": true
                     }
                   }
                 ],
-                "additionalProperties": false
+                "additionalProperties": true
               }
             },
             "gradual_slowdown": {
